@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{ pkgs, ... }: {
   # Enable dconf for GNOME settings
   programs.dconf.enable = true;
 
