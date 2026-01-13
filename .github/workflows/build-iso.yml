@@ -1,0 +1,100 @@
+name: Build NixOS Live ISO
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_artifact:
+        description: 'Upload ISO as artifact'
+        required: false
+        default: true
+        type: boolean
+
+  schedule:
+    - cron: '0 0 * * 1'  # Every Monday at 00:00 UTC
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'iso-configuration.nix'
+      - 'modules/**'
+      - '.github/workflows/build-iso.yml'
+
+jobs:
+  build-iso:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update flake inputs
+        run: nix flake update
+
+      - name: Build NixOS ISO
+        run: |
+          nix build .#nixosConfigurations.live-iso.config.system.build.isoImage \
+            --print-build-logs \
+            --show-trace
+
+      - name: Get ISO info
+        id: iso_info
+        run: |
+          ISO_PATH=$(find result/iso -name "*.iso" -type f | head -n1)
+          ISO_NAME=$(basename "$ISO_PATH")
+          ISO_SIZE=$(du -h "$ISO_PATH" | cut -f1)
+          VERSION_TAG="v$(date +%Y.%m.%d)"
+
+          echo "iso_path=$ISO_PATH" >> $GITHUB_OUTPUT
+          echo "iso_name=$ISO_NAME" >> $GITHUB_OUTPUT
+          echo "iso_size=$ISO_SIZE" >> $GITHUB_OUTPUT
+          echo "version_tag=$VERSION_TAG" >> $GITHUB_OUTPUT
+
+      - name: Upload ISO artifact
+        if: ${{ github.event.inputs.upload_artifact == 'true' || github.event_name != 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nixos-live-iso-${{ steps.iso_info.outputs.version_tag }}
+          path: ${{ steps.iso_info.outputs.iso_path }}
+          retention-days: 30
+
+      - name: Create Release
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.iso_info.outputs.version_tag }}
+          name: NixOS Live ISO ${{ steps.iso_info.outputs.version_tag }}
+          body: |
+            ## NixOS Live Boot ISO
+
+            **ISO Size:** ${{ steps.iso_info.outputs.iso_size }}
+
+            ### Features
+            - GNOME Desktop with Kanagawa dark theme (Stylix)
+            - Dev tools: git, vscode, nixd, nil, alejandra, claude-code
+            - CLI tools: bat, btop, lsd, ripgrep, fzf, gtrash
+            - Containers: docker (rootless), distrobox
+            - ZSH with Powerlevel10k
+
+            ### Usage
+            Write to USB:
+            ```bash
+            sudo dd if=${{ steps.iso_info.outputs.iso_name }} of=/dev/sdX bs=4M status=progress
+            ```
+
+            ### Credentials
+            - Username: `nixos`
+            - Password: (none - auto-login enabled)
+            - Sudo: passwordless
+
+          files: ${{ steps.iso_info.outputs.iso_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf result
+          nix-collect-garbage -d
