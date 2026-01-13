@@ -33,8 +33,6 @@
 
     packages = with pkgs; [
       noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
       noto-fonts-color-emoji
       nerd-fonts.noto
       nerd-fonts.ubuntu
