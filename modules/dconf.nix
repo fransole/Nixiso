@@ -1,69 +1,45 @@
-{ lib, ... }: {
+{ pkgs, lib, ... }: {
+  # Enable dconf for GNOME settings
   programs.dconf.enable = true;
 
-  # System-wide dconf defaults (applied to all users)
-  programs.dconf.profiles.user.databases = [{
-    settings = {
-      # Interface - Dark Mode
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-        font-antialiasing = "grayscale";
-        font-hinting = "slight";
-        clock-show-weekday = true;
-        clock-format = "24h";
-      };
+  # Create dconf profile for system-wide defaults
+  environment.etc."dconf/profile/user".text = ''
+    user-db:user
+    system-db:local
+  '';
 
-      # Mutter (Window Manager) Settings
-      "org/gnome/mutter" = {
-        experimental-features = [
-          "scale-monitor-framebuffer"  # Fractional scaling
-          "variable-refresh-rate"      # VRR support
-        ];
-        edge-tiling = true;
-      };
+  # Create dconf database with system defaults
+  environment.etc."dconf/db/local.d/00-dark-mode".text = ''
+    [org/gnome/desktop/interface]
+    color-scheme='prefer-dark'
+    gtk-theme='Adwaita-dark'
+    font-antialiasing='grayscale'
+    font-hinting='slight'
+    clock-show-weekday=true
+    clock-format='24h'
 
-      # Touchpad Settings
-      "org/gnome/desktop/peripherals/touchpad" = {
-        natural-scroll = false;
-        two-finger-scrolling-enabled = true;
-      };
+    [org/gnome/desktop/wm/preferences]
+    button-layout='appmenu:minimize,close'
 
-      # Shell Settings
-      "org/gnome/shell" = {
-        disable-extension-version-validation = true;
-        favorite-apps = [
-          "firefox.desktop"
-          "code.desktop"
-          "org.gnome.Console.desktop"
-          "org.gnome.Nautilus.desktop"
-        ];
-      };
+    [org/gnome/desktop/peripherals/touchpad]
+    natural-scroll=false
+    two-finger-scrolling-enabled=true
 
-      # Keybindings
-      "org/gnome/desktop/wm/keybindings" = {
-        close = ["<Alt>q"];
-      };
+    [org/gnome/shell]
+    disable-extension-version-validation=true
+    favorite-apps=['firefox.desktop', 'code.desktop', 'org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop']
 
-      "org/gnome/shell/keybindings" = {
-        show-screenshot-ui = ["<Shift><Super>s"];
-      };
+    [org/gnome/desktop/wm/keybindings]
+    close=['<Alt>q']
 
-      # Privacy Settings
-      "org/gnome/desktop/privacy" = {
-        remove-old-temp-files = true;
-        remove-old-trash-files = true;
-      };
+    [org/gnome/shell/keybindings]
+    show-screenshot-ui=['<Shift><Super>s']
+  '';
 
-      # Night Light
-      "org/gnome/settings-daemon/plugins/color" = {
-        night-light-enabled = true;
-        night-light-schedule-from = 22.0;
-      };
-
-      # Window Manager Preferences
-      "org/gnome/desktop/wm/preferences" = {
-        button-layout = "appmenu:minimize,close";
-      };
-    };
-  }];
+  # Update dconf database (required after creating database files)
+  system.activationScripts.dconfUpdate = lib.stringAfter [ "etc" ] ''
+    if [ -x ${pkgs.dconf}/bin/dconf ]; then
+      ${pkgs.dconf}/bin/dconf update
+    fi
+  '';
 }

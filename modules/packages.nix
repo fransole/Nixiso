@@ -29,7 +29,6 @@
     nmap
     wget
     curl
-    networkmanagerapplet
 
     # Development Tools
     alejandra
@@ -58,11 +57,9 @@
     noto-fonts
     noto-fonts-color-emoji
 
-    # Container Tools
-    distrobox
-
     # Utilities
     firefox
+    discord
   ])
   ++
   # Claude Code from llm-agents flake

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }: {
   imports = [
     ./modules/gnome.nix
-    ./modules/stylix.nix
+    ./modules/theming.nix
     ./modules/dconf.nix
     ./modules/packages.nix
     ./modules/users.nix
