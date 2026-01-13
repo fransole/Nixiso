@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{pkgs, ...}: {
   # GTK and GNOME theming without Stylix or home-manager
 
   # Install GTK themes and icon themes
@@ -53,10 +53,10 @@
       subpixel.rgba = "rgb";
 
       defaultFonts = {
-        serif = [ "Noto Serif" "DejaVu Serif" ];
-        sansSerif = [ "Noto Sans" "DejaVu Sans" ];
-        monospace = [ "NotoMono Nerd Font" "Noto Sans Mono" "DejaVu Sans Mono" ];
-        emoji = [ "Noto Color Emoji" ];
+        serif = ["Noto Serif" "DejaVu Serif"];
+        sansSerif = ["Noto Sans" "DejaVu Sans"];
+        monospace = ["NotoMono Nerd Font" "Noto Sans Mono" "DejaVu Sans Mono"];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };

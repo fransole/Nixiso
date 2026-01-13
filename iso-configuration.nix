@@ -1,4 +1,8 @@
-{ config, pkgs, lib, ... }: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./modules/gnome.nix
     ./modules/theming.nix
@@ -26,7 +30,7 @@
 
   # Nix settings
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = ["nix-command" "flakes"];
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
@@ -38,15 +42,6 @@
     ];
   };
 
-  # Docker (rootless)
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
-
   # ZSH
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
@@ -56,7 +51,12 @@
 
   # Filesystem support
   boot.supportedFilesystems = lib.mkForce [
-    "btrfs" "vfat" "f2fs" "xfs" "ntfs" "ext4"
+    "btrfs"
+    "vfat"
+    "f2fs"
+    "xfs"
+    "ntfs"
+    "ext4"
   ];
 
   # Timezone

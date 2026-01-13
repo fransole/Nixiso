@@ -11,7 +11,6 @@
 
     # File Management
     lsd
-    gtrash
     ripgrep
     fzf
 

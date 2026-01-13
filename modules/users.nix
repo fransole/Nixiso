@@ -3,7 +3,7 @@
   users.users.nixos = {
     isNormalUser = true;
     description = "Live User";
-    extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" ];
     shell = pkgs.zsh;
     initialPassword = "";
   };
@@ -28,12 +28,6 @@
 
     # Shell aliases
     shellAliases = {
-      # Modern replacements
-      ls = "lsd";
-      cat = "bat --paging=never";
-      grep = "rg";
-      rm = "gtrash put";
-
       # Git shortcuts
       gita = "git add -A && git commit -m";
 
@@ -45,8 +39,6 @@
       # Navigation
       cdn = "cd ~/Nixos";
 
-      # Utilities
-      clock = "clock-rs -c #7E9CD8";  # Using Kanagawa blue color
       su = "sudo -s";
       sudo = "sudo ";  # Allow aliases to work with sudo
     };
