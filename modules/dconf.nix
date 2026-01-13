@@ -18,6 +18,16 @@
     clock-show-weekday=true
     clock-format='24h'
 
+    [org/gnome/desktop/background]
+    picture-options='none'
+    primary-color='#1a1a1a'
+    secondary-color='#1a1a1a'
+
+    [org/gnome/desktop/screensaver]
+    picture-options='none'
+    primary-color='#1a1a1a'
+    secondary-color='#1a1a1a'
+
     [org/gnome/desktop/wm/preferences]
     button-layout='appmenu:minimize,close'
 
