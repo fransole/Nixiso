@@ -76,5 +76,26 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  # VM guest support - SPICE and QEMU guest tools for better VM integration
+  services.spice-vdagentd.enable = true; # SPICE guest agent for clipboard, resolution, etc.
+  services.qemuGuest.enable = true; # QEMU guest agent for better host integration
+
+  # Install VM guest tools
+  environment.systemPackages = with pkgs; [
+    spice-vdagent # SPICE guest agent
+    qemu-utils # QEMU utilities
+  ];
+
+  # Enable virtio modules for better VM performance
+  boot.initrd.availableKernelModules = [
+    "virtio_net"
+    "virtio_pci"
+    "virtio_mmio"
+    "virtio_blk"
+    "virtio_scsi"
+    "9p"
+    "9pnet_virtio"
+  ];
+
   system.stateVersion = "25.05";
 }
