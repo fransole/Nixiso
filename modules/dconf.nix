@@ -21,6 +21,9 @@
       # Apply GNOME settings via dconf
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/icon-theme "'Adwaita'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/cursor-theme "'Bibata-Modern-Ice'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/cursor-size "24"
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/font-antialiasing "'grayscale'"
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/font-hinting "'slight'"
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/clock-show-weekday "true"

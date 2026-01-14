@@ -9,6 +9,7 @@
     ./modules/dconf.nix
     ./modules/packages.nix
     ./modules/users.nix
+    ./modules/xdg.nix
   ];
 
   # ISO image settings
@@ -25,7 +26,6 @@
   networking = {
     hostName = "nixos-live";
     networkmanager.enable = true;
-    wireless.enable = lib.mkForce false;
   };
 
   # Nix settings

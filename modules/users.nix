@@ -45,8 +45,16 @@
 
     # Shell initialization
     promptInit = ''
+      # Enable Powerlevel10k instant prompt (must be at the very top)
+      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+      fi
+
       # Load Powerlevel10k theme
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+
+      # Load p10k configuration
+      [[ -f /etc/nixos/assets/p10k.zsh ]] && source /etc/nixos/assets/p10k.zsh
     '';
 
     interactiveShellInit = ''
@@ -70,9 +78,6 @@
 
       # Fix common typo
       alias cd..='cd ..'
-
-      # Source p10k config
-      [[ -f /etc/nixos/assets/p10k.zsh ]] && source /etc/nixos/assets/p10k.zsh
     '';
 
     # History configuration
