@@ -14,22 +14,25 @@
       DontCheckDefaultBrowser = true;
       NoDefaultBookmarks = true;
 
-      # Install extensions via policies
+      # Install extensions via policies and pin to toolbar
       ExtensionSettings = {
-        # uBlock Origin
+        # uBlock Origin - pinned to navbar
         "uBlock0@raymondhill.net" = {
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
           installation_mode = "force_installed";
+          default_area = "navbar";
         };
-        # Dark Reader
+        # Dark Reader - pinned to navbar
         "addon@darkreader.org" = {
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
           installation_mode = "force_installed";
+          default_area = "navbar";
         };
-        # Bitwarden
+        # Bitwarden - pinned to navbar
         "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
           installation_mode = "force_installed";
+          default_area = "navbar";
         };
       };
 
